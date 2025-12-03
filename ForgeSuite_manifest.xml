@@ -44,6 +44,8 @@
               
               <!-- CUSTOM TAB: ForgeSuite -->
               <CustomTab id="ForgeSuiteTab">
+                <Label resid="residForgeSuiteTabLabel" />
+                <InsertAfter>TabHome</InsertAfter>
                 
                 <!-- GROUP 1: Payroll Tools -->
                 <Group id="PayrollGroup">
@@ -164,8 +166,6 @@
                     </Action>
                   </Control>
                 </Group>
-
-                <Label resid="residForgeSuiteTabLabel" />
               </CustomTab>
 
             </ExtensionPoint>
