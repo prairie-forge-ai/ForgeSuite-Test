@@ -7,7 +7,7 @@
   xsi:type="TaskPaneApp"
 >
   <Id>18ec8be2-5471-47c8-b621-ce79b6782995</Id>
-  <Version>4.0.0.0</Version>
+  <Version>5.0.0.0</Version>
   <ProviderName>Prairie Forge</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="ForgeSuite by PrairieForge" />
@@ -37,8 +37,10 @@
             <LearnMoreUrl resid="LearnMoreUrl" />
           </GetStarted>
           <ExtensionPoint xsi:type="PrimaryCommandSurface">
-            <OfficeTab id="TabHome">
-              <Group id="ForgeSuiteGroup">
+            <CustomTab id="ForgeSuiteTab">
+              <Label resid="TabLabel" />
+              <InsertBefore>TabInsert</InsertBefore>
+              <Group id="MainGroup">
                 <Label resid="GroupLabel" />
                 <Icon>
                   <bt:Image size="16" resid="Icon16" />
@@ -94,7 +96,7 @@
                   </Action>
                 </Control>
               </Group>
-            </OfficeTab>
+            </CustomTab>
           </ExtensionPoint>
         </DesktopFormFactor>
       </Host>
@@ -112,7 +114,8 @@
         <bt:Url id="LearnMoreUrl" DefaultValue="https://prairieforge.ai" />
       </bt:Urls>
       <bt:ShortStrings>
-        <bt:String id="GroupLabel" DefaultValue="ForgeSuite" />
+        <bt:String id="TabLabel" DefaultValue="ForgeSuite" />
+        <bt:String id="GroupLabel" DefaultValue="Tools" />
         <bt:String id="PayrollLabel" DefaultValue="Payroll" />
         <bt:String id="PtoLabel" DefaultValue="PTO" />
         <bt:String id="AllLabel" DefaultValue="All Modules" />
