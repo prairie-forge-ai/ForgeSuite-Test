@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ACF ForgeSuite</title>
+
+    <!-- Office.js Library -->
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../Common/styles.css?v=20251202v3" />
+    <link rel="stylesheet" href="selector.css?v=20251202g" />
+</head>
+
+<body>
+    <div class="pf-brand-float" aria-hidden="true">
+        <span class="pf-brand-wave"></span>
+    </div>
+    <div class="app-shell">
+        <header class="glass-card hero-card">
+            <div class="hero-inner">
+                <div class="hero-title">
+                    <h1 id="heroGreeting">Hello</h1>
+                </div>
+                <div class="hero-meta">
+                    <div class="hero-meta-item">
+                        <span class="meta-label">Available Modules</span>
+                        <span class="meta-value" id="moduleCount">0</span>
+                    </div>
+                </div>
+                <!-- Quick Access to Reference Data -->
+                <div class="quick-access">
+                    <span class="quick-access-label">Quick Access</span>
+                    <div class="quick-access-buttons">
+                        <button type="button" class="quick-access-btn" id="quickRosterBtn" title="Employee Roster">
+                            <svg class="quick-access-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            <span>Roster</span>
+                        </button>
+                        <button type="button" class="quick-access-btn" id="quickAccountsBtn" title="Chart of Accounts">
+                            <svg class="quick-access-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+                                <path d="M8 7h6"/>
+                                <path d="M8 11h8"/>
+                            </svg>
+                            <span>Accounts</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="glass-card modules-card">
+            <div class="modules-header">
+                <h2>Your Modules</h2>
+            </div>
+            <div class="module-grid" id="moduleGrid"></div>
+        </section>
+
+        <section class="glass-card brand-card">
+            <div class="brand-text">
+                <div class="brand-label">prairie.forge</div>
+                <div class="brand-meta">© Prairie Forge LLC, 2025. All rights reserved. Version 1.0.0</div>
+                <button type="button" class="admin-link" id="adminLink">Admin</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Admin Portal (hidden by default) -->
+    <div class="admin-overlay" id="adminOverlay" hidden>
+        <div class="admin-modal glass-card">
+            <!-- Password Gate -->
+            <div class="admin-gate" id="adminGate">
+                <div class="admin-header">
+                    <h2>Admin Access</h2>
+                    <button type="button" class="admin-close" id="adminClose">&times;</button>
+                </div>
+                <div class="admin-body">
+                    <p class="admin-subtitle">Enter the admin password to continue.</p>
+                    <div class="admin-form">
+                        <input type="password" id="adminPassword" class="admin-input" placeholder="Password" autocomplete="off">
+                        <button type="button" class="admin-btn" id="adminSubmit">Enter</button>
+                    </div>
+                    <p class="admin-error" id="adminError" hidden>Incorrect password. Please try again.</p>
+                </div>
+            </div>
+
+            <!-- Admin Dashboard (shown after auth) -->
+            <div class="admin-dashboard" id="adminDashboard" hidden>
+                <div class="admin-header">
+                    <h2>Admin Portal</h2>
+                    <button type="button" class="admin-close" id="adminCloseAuth">&times;</button>
+                </div>
+                <div class="admin-body">
+                    <!-- Mode Selection -->
+                    <div class="admin-mode-selector">
+                        <button type="button" class="admin-mode-btn active" data-mode="builder">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.375 2.625a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"/>
+                            </svg>
+                            Module Builder
+                        </button>
+                        <button type="button" class="admin-mode-btn" data-mode="manage">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            Settings & Tools
+                        </button>
+                    </div>
+
+                    <!-- MODULE BUILDER WIZARD -->
+                    <div class="admin-mode-content active" id="mode-builder">
+                        <!-- Progress Indicator -->
+                        <div class="builder-progress">
+                            <div class="builder-progress-step active" data-step="1">
+                                <span class="progress-num">1</span>
+                                <span class="progress-label">Module</span>
+                            </div>
+                            <div class="builder-progress-line"></div>
+                            <div class="builder-progress-step" data-step="2">
+                                <span class="progress-num">2</span>
+                                <span class="progress-label">Steps</span>
+                            </div>
+                            <div class="builder-progress-line"></div>
+                            <div class="builder-progress-step" data-step="3">
+                                <span class="progress-num">3</span>
+                                <span class="progress-label">Tabs</span>
+                            </div>
+                            <div class="builder-progress-line"></div>
+                            <div class="builder-progress-step" data-step="4">
+                                <span class="progress-num">4</span>
+                                <span class="progress-label">Functions</span>
+                            </div>
+                            <div class="builder-progress-line"></div>
+                            <div class="builder-progress-step" data-step="5">
+                                <span class="progress-num">5</span>
+                                <span class="progress-label">Fields</span>
+                            </div>
+                            <div class="builder-progress-line"></div>
+                            <div class="builder-progress-step" data-step="6">
+                                <span class="progress-num">✓</span>
+                                <span class="progress-label">Review</span>
+                            </div>
+                        </div>
+
+                        <!-- Step 1: Define Module -->
+                        <div class="builder-step active" id="builderStep1">
+                            <div class="builder-step-header">
+                                <h3>Define Module</h3>
+                                <p>Create a new module or edit an existing one.</p>
+                            </div>
+                            <div class="builder-step-content">
+                                <div class="builder-choice">
+                                    <button type="button" class="builder-choice-btn" id="builderNewModule">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14"/>
+                                            <path d="M12 5v14"/>
+                                        </svg>
+                                        <span class="choice-title">New Module</span>
+                                        <span class="choice-desc">Start from scratch</span>
+                                    </button>
+                                    <button type="button" class="builder-choice-btn" id="builderEditModule">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                                            <path d="m15 5 4 4"/>
+                                        </svg>
+                                        <span class="choice-title">Edit Existing</span>
+                                        <span class="choice-desc">Modify a module</span>
+                                    </button>
+                                </div>
+                                
+                                <!-- New Module Form -->
+                                <div class="builder-form" id="builderNewModuleForm" hidden>
+                                    <label class="admin-field">
+                                        <span>Module Name</span>
+                                        <input type="text" id="builderModuleName" class="admin-input" placeholder="e.g., PTO Accrual">
+                                    </label>
+                                    <label class="admin-field">
+                                        <span>Prefix (for naming tabs)</span>
+                                        <input type="text" id="builderModulePrefix" class="admin-input" placeholder="e.g., PTO" maxlength="10">
+                                    </label>
+                                    <label class="admin-field">
+                                        <span>Description (optional)</span>
+                                        <input type="text" id="builderModuleDesc" class="admin-input" placeholder="Brief description">
+                                    </label>
+                                    <div class="builder-template-option">
+                                        <label class="admin-checkbox">
+                                            <input type="checkbox" id="builderUseTemplate">
+                                            <span>Copy settings from existing module</span>
+                                        </label>
+                                        <select id="builderTemplateModule" class="admin-select" hidden>
+                                            <option value="">Select module...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <!-- Edit Module Selector -->
+                                <div class="builder-form" id="builderEditModuleForm" hidden>
+                                    <label class="admin-field">
+                                        <span>Select Module to Edit</span>
+                                        <select id="builderEditModuleSelect" class="admin-select admin-select--large">
+                                            <option value="">Choose a module...</option>
+                                        </select>
+                                    </label>
+                                    <div class="builder-module-summary" id="builderModuleSummary" hidden>
+                                        <div class="summary-stat">
+                                            <span class="summary-value" id="summarySteps">0</span>
+                                            <span class="summary-label">Steps</span>
+                                        </div>
+                                        <div class="summary-stat">
+                                            <span class="summary-value" id="summaryTabs">0</span>
+                                            <span class="summary-label">Tabs</span>
+                                        </div>
+                                        <div class="summary-stat">
+                                            <span class="summary-value" id="summaryFunctions">0</span>
+                                            <span class="summary-label">Functions</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Configure Steps -->
+                        <div class="builder-step" id="builderStep2" hidden>
+                            <div class="builder-step-header">
+                                <h3>Configure Steps</h3>
+                                <p>Select the workflow steps for <strong id="step2ModuleName">this module</strong>.</p>
+                            </div>
+                            <div class="builder-step-content">
+                                <div class="builder-steps-list" id="builderStepsList">
+                                    <!-- Step checkboxes populated by JS -->
+                                </div>
+                                <button type="button" class="admin-btn admin-btn--secondary admin-btn--small" id="addCustomStep">
+                                    + Add Custom Step
+                                </button>
+                                <div class="custom-step-form" id="customStepForm" hidden>
+                                    <input type="text" id="customStepName" class="admin-input" placeholder="Custom step name">
+                                    <button type="button" class="admin-btn admin-btn--small" id="confirmCustomStep">Add</button>
+                                    <button type="button" class="admin-btn admin-btn--secondary admin-btn--small" id="cancelCustomStep">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Assign Tabs to Steps -->
+                        <div class="builder-step" id="builderStep3" hidden>
+                            <div class="builder-step-header">
+                                <h3>Assign Tabs</h3>
+                                <p>Define which Excel tabs support each step.</p>
+                            </div>
+                            <div class="builder-step-content">
+                                <div class="builder-tabs-assignment" id="builderTabsAssignment">
+                                    <!-- Step-tab assignments populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Step Functions (NEW!) -->
+                        <div class="builder-step" id="builderStep4" hidden>
+                            <div class="builder-step-header">
+                                <h3>Step Functions</h3>
+                                <p>Select which tools and actions are available in each step's side panel.</p>
+                            </div>
+                            <div class="builder-step-content">
+                                <div class="builder-functions-list" id="builderFunctionsList">
+                                    <!-- Function assignments populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 5: Column Mapping / Fields -->
+                        <div class="builder-step" id="builderStep5" hidden>
+                            <div class="builder-step-header">
+                                <h3>Define Fields</h3>
+                                <p>Set up column headers for each tab. Upload a sample file or define manually.</p>
+                            </div>
+                            <div class="builder-step-content">
+                                <div class="builder-fields-tabs">
+                                    <select id="builderFieldsTabSelect" class="admin-select">
+                                        <option value="">Select a tab to configure...</option>
+                                    </select>
+                                </div>
+                                <div class="builder-fields-config" id="builderFieldsConfig" hidden>
+                                    <div class="fields-upload-option">
+                                        <p>Upload a sample file to auto-detect columns:</p>
+                                        <div class="upload-dropzone" id="builderFieldsDropzone">
+                                            <input type="file" id="builderFieldsFile" accept=".csv,.xlsx,.xls" hidden>
+                                            <div class="upload-icon">📁</div>
+                                            <p class="upload-text">Drop CSV or Excel file here</p>
+                                            <p class="upload-hint">or click to browse</p>
+                                        </div>
+                                    </div>
+                                    <div class="fields-manual-option">
+                                        <p>Or define columns manually:</p>
+                                        <div class="fields-list" id="builderFieldsList">
+                                            <!-- Fields populated by JS -->
+                                        </div>
+                                        <button type="button" class="admin-btn admin-btn--secondary admin-btn--small" id="addFieldBtn">
+                                            + Add Column
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 6: Review & Create -->
+                        <div class="builder-step" id="builderStep6" hidden>
+                            <div class="builder-step-header">
+                                <h3>Review & Create</h3>
+                                <p>Review your module configuration before creating.</p>
+                            </div>
+                            <div class="builder-step-content">
+                                <div class="builder-review" id="builderReview">
+                                    <!-- Review summary populated by JS -->
+                                </div>
+                                <div class="builder-create-progress" id="builderCreateProgress" hidden>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="builderProgressFill"></div>
+                                    </div>
+                                    <p class="progress-text" id="builderProgressText">Creating module...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Buttons -->
+                        <div class="builder-nav">
+                            <button type="button" class="admin-btn admin-btn--secondary" id="builderPrevBtn" hidden>
+                                ← Previous
+                            </button>
+                            <button type="button" class="admin-btn" id="builderNextBtn">
+                                Next →
+                            </button>
+                            <button type="button" class="admin-btn admin-btn--primary" id="builderCreateBtn" hidden>
+                                Create Module
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- SETTINGS & TOOLS -->
+                    <div class="admin-mode-content" id="mode-manage" hidden>
+                        <!-- Settings Tabs -->
+                        <div class="settings-tabs">
+                            <button type="button" class="settings-tab active" data-settings="tabs">Tab Management</button>
+                            <button type="button" class="settings-tab" data-settings="config">Shared Config</button>
+                            <button type="button" class="settings-tab" data-settings="utilities">Utilities</button>
+                        </div>
+
+                        <!-- Tab Management -->
+                        <div class="settings-content active" id="settings-tabs">
+                            <div class="admin-section">
+                                <h3>Tab Management</h3>
+                                <p class="admin-hint">Manage which Excel tabs belong to each module.</p>
+                                
+                                <div class="tab-mgmt-filter">
+                                    <label class="admin-field admin-field--inline">
+                                        <span>Filter by Module:</span>
+                                        <select id="tabModuleFilter" class="admin-select">
+                                            <option value="">All Modules</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                
+                                <p class="tab-mgmt-count">Loading tab mappings...</p>
+                                <div class="tab-mgmt-list" id="tabMgmtList">
+                                    <!-- Populated by JS -->
+                                </div>
+                                
+                                <div class="tab-mgmt-add">
+                                    <h4>Add New Tab Mapping</h4>
+                                    <div class="tab-mgmt-add-form">
+                                        <select id="newTabModule" class="admin-select" required>
+                                            <option value="">Select Module...</option>
+                                        </select>
+                                        <input type="text" id="newTabName" class="admin-input" placeholder="Tab Name (e.g. PR_Data)">
+                                        <input type="text" id="newTabFolder" class="admin-input" placeholder="Module Key (e.g. payroll-recorder)" title="Valid: payroll-recorder, pto-accrual, employee-roster, shared, all">
+                                        <button type="button" class="admin-btn" id="addTabMappingBtn">Add</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shared Config -->
+                        <div class="settings-content" id="settings-config" hidden>
+                            <div class="admin-section">
+                                <h3>Shared Configuration</h3>
+                                <p class="admin-hint">These values are shared across all modules.</p>
+                                <div class="admin-form-grid">
+                                    <label class="admin-field">
+                                        <span>Company Name</span>
+                                        <input type="text" id="sharedCompanyName" class="admin-input" placeholder="Your Company">
+                                    </label>
+                                    <label class="admin-field">
+                                        <span>Default Reviewer Name</span>
+                                        <input type="text" id="sharedReviewerName" class="admin-input" placeholder="Full Name">
+                                    </label>
+                                    <label class="admin-field">
+                                        <span>Accounting Software Link</span>
+                                        <input type="url" id="sharedAccountingLink" class="admin-input" placeholder="https://...">
+                                    </label>
+                                    <label class="admin-field">
+                                        <span>Payroll Provider Link</span>
+                                        <input type="url" id="sharedPayrollLink" class="admin-input" placeholder="https://...">
+                                    </label>
+                                </div>
+                                <button type="button" class="admin-btn" id="saveSharedConfig">Save Shared Config</button>
+                            </div>
+                        </div>
+
+                        <!-- Utilities -->
+                        <div class="settings-content" id="settings-utilities" hidden>
+                            <div class="admin-section">
+                                <h3>Utilities</h3>
+                                <div class="admin-utilities">
+                                    <button type="button" class="admin-btn admin-btn--secondary" id="validateConfigBtn">Validate Config</button>
+                                    <button type="button" class="admin-btn admin-btn--secondary" id="generateFieldsBtn">Generate All Fields</button>
+                                    <button type="button" class="admin-btn admin-btn--secondary" id="exportConfigBtn">Export Config</button>
+                                </div>
+                                <div class="admin-log" id="adminLog">
+                                    <p class="admin-log-placeholder">Utility output will appear here...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reference Data Modal -->
+    <div class="ref-data-overlay" id="refDataOverlay" hidden>
+        <div class="ref-data-modal">
+            <div class="ref-data-header">
+                <h2 id="refDataTitle">Reference Data</h2>
+                <button type="button" class="ref-data-close" id="refDataClose">&times;</button>
+            </div>
+            <div class="ref-data-body">
+                <!-- View Mode -->
+                <div class="ref-data-view-mode" id="refDataViewMode">
+                    <!-- Summary Stats -->
+                    <div class="ref-data-summary">
+                        <div class="ref-data-stat">
+                            <span class="ref-data-stat-value" id="refDataRowCount">0</span>
+                            <span class="ref-data-stat-label">Records</span>
+                        </div>
+                        <div class="ref-data-stat">
+                            <span class="ref-data-stat-value" id="refDataLastUpdated">—</span>
+                            <span class="ref-data-stat-label">Last Updated</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Sheet Status -->
+                    <div class="ref-data-sheet-status" id="refDataSheetStatus">
+                        <span class="ref-data-sheet-name" id="refDataSheetName">SS_Employee_Roster</span>
+                        <span class="ref-data-sheet-badge" id="refDataSheetBadge">Ready</span>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="ref-data-actions">
+                        <button type="button" class="ref-data-btn ref-data-btn--primary" id="refDataEditBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                                <path d="m15 5 4 4"/>
+                            </svg>
+                            Make Changes
+                        </button>
+                        <button type="button" class="ref-data-btn ref-data-btn--secondary" id="refDataOpenSheet">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                <polyline points="15 3 21 3 21 9"/>
+                                <line x1="10" x2="21" y1="14" y2="3"/>
+                            </svg>
+                            Open in Excel
+                        </button>
+                    </div>
+                    
+                    <!-- Empty/Loading States -->
+                    <div class="ref-data-empty" id="refDataEmpty" hidden>
+                        <p>Sheet not found</p>
+                        <button type="button" class="ref-data-btn ref-data-btn--primary" onclick="createRefDataSheet()">Create Sheet</button>
+                    </div>
+                    <div class="ref-data-loading" id="refDataLoading" hidden>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+                
+                <!-- Edit Mode -->
+                <div class="ref-data-edit-mode" id="refDataEditMode" hidden>
+                    <!-- Edit Type Selection -->
+                    <div class="edit-type-selection" id="editTypeSelection">
+                        <p class="edit-prompt">How would you like to make changes?</p>
+                        <div class="edit-type-buttons">
+                            <button type="button" class="edit-type-btn" id="editTypeQuick">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                                </svg>
+                                <span class="edit-type-title">Quick Edit</span>
+                                <span class="edit-type-desc">One-off changes to individual records</span>
+                            </button>
+                            <button type="button" class="edit-type-btn" id="editTypeBulk">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="17 8 12 3 7 8"/>
+                                    <line x1="12" x2="12" y1="3" y2="15"/>
+                                </svg>
+                                <span class="edit-type-title">Bulk Upload</span>
+                                <span class="edit-type-desc">Replace from CSV/Excel file</span>
+                            </button>
+                        </div>
+                        <button type="button" class="edit-back-btn" id="editBackToView">← Back to View</button>
+                    </div>
+                    
+                    <!-- Quick Edit Panel (Employee) -->
+                    <div class="quick-edit-panel" id="quickEditEmployee" hidden>
+                        <div class="quick-edit-header">
+                            <button type="button" class="edit-back-btn" id="quickEditBackEmployee">← Back</button>
+                            <h3>Quick Edit: Employee Roster</h3>
+                        </div>
+                        <div class="quick-edit-actions">
+                            <button type="button" class="quick-action-btn" data-action="add">
+                                <span class="quick-action-icon">➕</span>
+                                <span>Add Employee</span>
+                            </button>
+                            <button type="button" class="quick-action-btn" data-action="terminate">
+                                <span class="quick-action-icon">➖</span>
+                                <span>Terminate</span>
+                            </button>
+                            <button type="button" class="quick-action-btn" data-action="transfer">
+                                <span class="quick-action-icon">🔄</span>
+                                <span>Transfer</span>
+                            </button>
+                            <button type="button" class="quick-action-btn" data-action="edit">
+                                <span class="quick-action-icon">✏️</span>
+                                <span>Edit Details</span>
+                            </button>
+                        </div>
+                        <div class="quick-edit-form" id="quickEditFormEmployee">
+                            <!-- Form fields populated by JS based on action -->
+                        </div>
+                        <div class="quick-edit-preview" id="quickEditPreviewEmployee" hidden>
+                            <!-- Preview populated by JS -->
+                        </div>
+                        <div class="quick-edit-buttons" id="quickEditButtonsEmployee" hidden>
+                            <button type="button" class="admin-btn admin-btn--secondary" id="quickEditCancelEmployee">Cancel</button>
+                            <button type="button" class="admin-btn" id="quickEditConfirmEmployee">Confirm Change</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Edit Panel (GL/Accounts) -->
+                    <div class="quick-edit-panel" id="quickEditAccounts" hidden>
+                        <div class="quick-edit-header">
+                            <button type="button" class="edit-back-btn" id="quickEditBackAccounts">← Back</button>
+                            <h3>Quick Edit: Chart of Accounts</h3>
+                        </div>
+                        <div class="quick-edit-actions">
+                            <button type="button" class="quick-action-btn" data-action="add">
+                                <span class="quick-action-icon">➕</span>
+                                <span>Add Account</span>
+                            </button>
+                            <button type="button" class="quick-action-btn" data-action="delete">
+                                <span class="quick-action-icon">➖</span>
+                                <span>Delete Account</span>
+                            </button>
+                            <button type="button" class="quick-action-btn" data-action="rename">
+                                <span class="quick-action-icon">✏️</span>
+                                <span>Rename</span>
+                            </button>
+                            <button type="button" class="quick-action-btn" data-action="renumber">
+                                <span class="quick-action-icon">#️⃣</span>
+                                <span>Change Number</span>
+                            </button>
+                        </div>
+                        <div class="quick-edit-form" id="quickEditFormAccounts">
+                            <!-- Form fields populated by JS based on action -->
+                        </div>
+                        <div class="quick-edit-preview" id="quickEditPreviewAccounts" hidden>
+                            <!-- Preview populated by JS -->
+                        </div>
+                        <div class="quick-edit-buttons" id="quickEditButtonsAccounts" hidden>
+                            <button type="button" class="admin-btn admin-btn--secondary" id="quickEditCancelAccounts">Cancel</button>
+                            <button type="button" class="admin-btn" id="quickEditConfirmAccounts">Confirm Change</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Bulk Upload Panel -->
+                    <div class="bulk-upload-panel" id="bulkUploadPanel" hidden>
+                        <div class="quick-edit-header">
+                            <button type="button" class="edit-back-btn" id="bulkUploadBack">← Back</button>
+                            <h3 id="bulkUploadTitle">Bulk Upload</h3>
+                        </div>
+                        <div class="bulk-upload-dropzone" id="bulkUploadDropzone">
+                            <input type="file" id="bulkUploadFile" accept=".csv,.xlsx,.xls" hidden>
+                            <div class="upload-icon">📁</div>
+                            <p class="upload-text">Drop CSV or Excel file here</p>
+                            <p class="upload-hint">or click to browse</p>
+                        </div>
+                        <div class="bulk-upload-file-info" id="bulkUploadFileInfo" hidden>
+                            <span class="file-icon">📄</span>
+                            <span class="file-name" id="bulkUploadFileName">—</span>
+                            <span class="file-rows" id="bulkUploadFileRows">0 rows</span>
+                            <button type="button" class="file-remove" id="bulkUploadFileRemove">×</button>
+                        </div>
+                        <div class="bulk-upload-comparison" id="bulkUploadComparison" hidden>
+                            <h4>Comparison Results</h4>
+                            <div class="comparison-results" id="comparisonResults">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                        <div class="bulk-upload-warning" id="bulkUploadWarning" hidden>
+                            <p>⚠️ <span id="bulkUploadWarningText">This will replace all current data.</span></p>
+                        </div>
+                        <div class="bulk-upload-buttons" id="bulkUploadButtons" hidden>
+                            <button type="button" class="admin-btn admin-btn--secondary" id="bulkUploadCancel">Cancel</button>
+                            <button type="button" class="admin-btn admin-btn--danger" id="bulkUploadConfirm">Confirm & Replace All</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Common utilities (PrairieForge namespace) -->
+    <script src="../Common/common.js?v=20251202v3"></script>
+    
+    <!-- Application script -->
+    <script type="module" src="selector.js?v=20251202g"></script>
+</body>
+</html>

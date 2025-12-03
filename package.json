@@ -1,0 +1,17 @@
+{
+  "name": "acf-forgesuite",
+  "private": true,
+  "scripts": {
+    "build:payroll": "node scripts/build-payroll.js",
+    "build:pto": "node scripts/build-pto.js",
+    "build:all": "npm run build:payroll && npm run build:pto",
+    "lint": "eslint . --ext .js",
+    "test": "node --test \"tests/**/*.mjs\""
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "esbuild": "^0.27.0",
+    "eslint": "^9.39.1",
+    "globals": "^16.1.0"
+  }
+}

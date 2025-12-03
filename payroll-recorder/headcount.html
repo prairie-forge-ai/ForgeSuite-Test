@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ACF ForgeSuite - Headcount Review</title>
+
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <link rel="stylesheet" href="../Common/styles.css?v=20251202v3" />
+    <link rel="stylesheet" href="styles.css?v=20251202v3" />
+</head>
+
+<body>
+    <div id="hc-app" class="headcount-shell">
+        <div class="headcount-card headcount-hero">
+            <div class="headcount-hero-text">
+                <h1>Headcount Review</h1>
+                <p class="headcount-subtitle">
+                    This page acts as the source of truth for your employee roster. While not mandatory, we highly
+                    recommend starting your payroll related processes here. This helps ensure the completeness and
+                    accuracy of your payroll data. The information also contributes to more meaningful explanations
+                    during your variance analysis!
+                </p>
+                <div class="headcount-last-row">
+                    <div>
+                        <span class="last-label">Last Update</span>
+                        <span id="hc-last-update" class="last-value">—</span>
+                    </div>
+                    <div class="headcount-hero-actions">
+                        <button id="hc-open-headcount" type="button">Open Headcount tab</button>
+                    </div>
+                </div>
+            </div>
+            <div id="hc-status" class="headcount-status" role="status" aria-live="polite">
+                Connecting to Excel…
+            </div>
+        </div>
+
+        <div class="headcount-card headcount-workflow">
+            <div class="headcount-workflow-header">
+                <div>
+                    <h2>Workflow</h2>
+                    <p>Log updates each time employees join, leave, or move.</p>
+                </div>
+            </div>
+            <div class="workflow-grid">
+                <button class="pf-action-tile" data-action="new">
+                    <span class="pf-action-icon">✨</span>
+                    <div>
+                        <div class="pf-action-title">New Employees</div>
+                        <p class="pf-action-subtitle">Add any employees that have started since the last update.</p>
+                    </div>
+                </button>
+                <button class="pf-action-tile" data-action="term">
+                    <span class="pf-action-icon">🌀</span>
+                    <div>
+                        <div class="pf-action-title">Terminated Employees</div>
+                        <p class="pf-action-subtitle">Record any terminations that have occurred since the last update.</p>
+                    </div>
+                </button>
+                <button class="pf-action-tile" data-action="changes">
+                    <span class="pf-action-icon">🧭</span>
+                    <div>
+                        <div class="pf-action-title">Other Changes</div>
+                        <p class="pf-action-subtitle">Capture department and/or location changes for existing employees.</p>
+                    </div>
+                </button>
+            </div>
+            <button id="hc-open-selector" type="button" class="pf-action-tile pf-action-tile--ghost">
+                <span class="pf-action-icon">🏠</span>
+                <div>
+                    <div class="pf-action-title">Return to Module Selector</div>
+                    <p class="pf-action-subtitle">Open the Prairie Forge module launcher.</p>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <div id="hc-panel" class="headcount-panel hidden" aria-hidden="true">
+        <div class="hc-panel-backdrop"></div>
+        <div class="hc-panel-card" role="dialog" aria-modal="true" aria-labelledby="hc-panel-title">
+            <div class="hc-panel-header">
+                <div>
+                    <div class="hc-panel-eyebrow" id="hc-panel-eyebrow"></div>
+                    <h3 id="hc-panel-title"></h3>
+                </div>
+                <button type="button" id="hc-panel-close" aria-label="Close panel">×</button>
+            </div>
+            <div id="hc-panel-body" class="hc-panel-body"></div>
+            <div class="hc-panel-actions">
+                <button type="button" id="hc-panel-save">Save</button>
+                <button type="button" id="hc-panel-cancel" class="secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <datalist id="hc-dept-datalist"></datalist>
+    <datalist id="hc-location-datalist"></datalist>
+
+    <script src="headcount.js?v=20251126c"></script>
+</body>
+</html>
