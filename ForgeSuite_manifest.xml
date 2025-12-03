@@ -7,7 +7,7 @@
   xsi:type="TaskPaneApp"
 >
   <Id>18ec8be2-5471-47c8-b621-ce79b6782995</Id>
-  <Version>2.0.0.0</Version>
+  <Version>2.0.1.0</Version>
   <ProviderName>Prairie Forge</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="ForgeSuite by PrairieForge" />
@@ -27,185 +27,110 @@
   </DefaultSettings>
   <Permissions>ReadWriteDocument</Permissions>
   
-  <!-- VersionOverrides 1.0 wrapper -->
   <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
-    
-    <!-- VersionOverrides 1.1 for CustomTab support -->
-    <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides/1.1" xsi:type="VersionOverridesV1_1">
-      <Hosts>
-        <Host xsi:type="Workbook">
-          <DesktopFormFactor>
-            <GetStarted>
-              <Title resid="residGetStartedTitle" />
-              <Description resid="residGetStartedDescription" />
-              <LearnMoreUrl resid="residLearnMoreUrl" />
-            </GetStarted>
-            <ExtensionPoint xsi:type="PrimaryCommandSurface">
-              
-              <!-- CUSTOM TAB: ForgeSuite -->
-              <CustomTab id="ForgeSuiteTab">
-                <Label resid="residForgeSuiteTabLabel" />
-                <InsertAfter>TabHome</InsertAfter>
+    <Hosts>
+      <Host xsi:type="Workbook">
+        <DesktopFormFactor>
+          <GetStarted>
+            <Title resid="residGetStartedTitle" />
+            <Description resid="residGetStartedDescription" />
+            <LearnMoreUrl resid="residLearnMoreUrl" />
+          </GetStarted>
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <!-- Add ForgeSuite group to Home tab -->
+            <OfficeTab id="TabHome">
+              <Group id="ForgeSuiteGroup">
+                <Label resid="residGroupLabel" />
+                <Icon>
+                  <bt:Image size="16" resid="residIcon16" />
+                  <bt:Image size="32" resid="residIcon32" />
+                  <bt:Image size="80" resid="residIcon80" />
+                </Icon>
                 
-                <!-- GROUP 1: Payroll Tools -->
-                <Group id="PayrollGroup">
-                  <Label resid="residPayrollGroupLabel" />
+                <!-- Payroll Recorder Button -->
+                <Control xsi:type="Button" id="PayrollBtn">
+                  <Label resid="residPayrollBtnLabel" />
+                  <Supertip>
+                    <Title resid="residPayrollBtnLabel" />
+                    <Description resid="residPayrollBtnDescription" />
+                  </Supertip>
                   <Icon>
                     <bt:Image size="16" resid="residIcon16" />
                     <bt:Image size="32" resid="residIcon32" />
                     <bt:Image size="80" resid="residIcon80" />
                   </Icon>
-                  <Control xsi:type="Button" id="PayrollRecorderBtn">
-                    <Label resid="residPayrollBtnLabel" />
-                    <Supertip>
-                      <Title resid="residPayrollBtnLabel" />
-                      <Description resid="residPayrollBtnDescription" />
-                    </Supertip>
-                    <Icon>
-                      <bt:Image size="16" resid="residIcon16" />
-                      <bt:Image size="32" resid="residIcon32" />
-                      <bt:Image size="80" resid="residIcon80" />
-                    </Icon>
-                    <Action xsi:type="ShowTaskpane">
-                      <TaskpaneId>TaskpanePayroll</TaskpaneId>
-                      <SourceLocation resid="residPayrollUrl" />
-                    </Action>
-                  </Control>
-                </Group>
-
-                <!-- GROUP 2: Time Off Tools -->
-                <Group id="TimeOffGroup">
-                  <Label resid="residTimeOffGroupLabel" />
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>TaskpanePayroll</TaskpaneId>
+                    <SourceLocation resid="residPayrollUrl" />
+                  </Action>
+                </Control>
+                
+                <!-- PTO Accrual Button -->
+                <Control xsi:type="Button" id="PtoBtn">
+                  <Label resid="residPtoBtnLabel" />
+                  <Supertip>
+                    <Title resid="residPtoBtnLabel" />
+                    <Description resid="residPtoBtnDescription" />
+                  </Supertip>
                   <Icon>
                     <bt:Image size="16" resid="residIcon16" />
                     <bt:Image size="32" resid="residIcon32" />
                     <bt:Image size="80" resid="residIcon80" />
                   </Icon>
-                  <Control xsi:type="Button" id="PtoAccrualBtn">
-                    <Label resid="residPtoBtnLabel" />
-                    <Supertip>
-                      <Title resid="residPtoBtnLabel" />
-                      <Description resid="residPtoBtnDescription" />
-                    </Supertip>
-                    <Icon>
-                      <bt:Image size="16" resid="residIcon16" />
-                      <bt:Image size="32" resid="residIcon32" />
-                      <bt:Image size="80" resid="residIcon80" />
-                    </Icon>
-                    <Action xsi:type="ShowTaskpane">
-                      <TaskpaneId>TaskpanePTO</TaskpaneId>
-                      <SourceLocation resid="residPtoUrl" />
-                    </Action>
-                  </Control>
-                </Group>
-
-                <!-- GROUP 3: Expense Tools -->
-                <Group id="ExpenseGroup">
-                  <Label resid="residExpenseGroupLabel" />
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>TaskpanePTO</TaskpaneId>
+                    <SourceLocation resid="residPtoUrl" />
+                  </Action>
+                </Control>
+                
+                <!-- All Modules Button -->
+                <Control xsi:type="Button" id="AllModulesBtn">
+                  <Label resid="residAllModulesBtnLabel" />
+                  <Supertip>
+                    <Title resid="residAllModulesBtnLabel" />
+                    <Description resid="residAllModulesBtnDescription" />
+                  </Supertip>
                   <Icon>
                     <bt:Image size="16" resid="residIcon16" />
                     <bt:Image size="32" resid="residIcon32" />
                     <bt:Image size="80" resid="residIcon80" />
                   </Icon>
-                  <Control xsi:type="Button" id="CreditCardBtn">
-                    <Label resid="residCreditCardBtnLabel" />
-                    <Supertip>
-                      <Title resid="residCreditCardBtnLabel" />
-                      <Description resid="residCreditCardBtnDescription" />
-                    </Supertip>
-                    <Icon>
-                      <bt:Image size="16" resid="residIcon16" />
-                      <bt:Image size="32" resid="residIcon32" />
-                      <bt:Image size="80" resid="residIcon80" />
-                    </Icon>
-                    <Action xsi:type="ShowTaskpane">
-                      <TaskpaneId>TaskpaneExpense</TaskpaneId>
-                      <SourceLocation resid="residModuleSelectorUrl" />
-                    </Action>
-                  </Control>
-                  <Control xsi:type="Button" id="CommissionBtn">
-                    <Label resid="residCommissionBtnLabel" />
-                    <Supertip>
-                      <Title resid="residCommissionBtnLabel" />
-                      <Description resid="residCommissionBtnDescription" />
-                    </Supertip>
-                    <Icon>
-                      <bt:Image size="16" resid="residIcon16" />
-                      <bt:Image size="32" resid="residIcon32" />
-                      <bt:Image size="80" resid="residIcon80" />
-                    </Icon>
-                    <Action xsi:type="ShowTaskpane">
-                      <TaskpaneId>TaskpaneCommission</TaskpaneId>
-                      <SourceLocation resid="residModuleSelectorUrl" />
-                    </Action>
-                  </Control>
-                </Group>
-
-                <!-- GROUP 4: Administration -->
-                <Group id="AdminGroup">
-                  <Label resid="residAdminGroupLabel" />
-                  <Icon>
-                    <bt:Image size="16" resid="residIcon16" />
-                    <bt:Image size="32" resid="residIcon32" />
-                    <bt:Image size="80" resid="residIcon80" />
-                  </Icon>
-                  <Control xsi:type="Button" id="ModuleSelectorBtn">
-                    <Label resid="residModuleSelectorBtnLabel" />
-                    <Supertip>
-                      <Title resid="residModuleSelectorBtnLabel" />
-                      <Description resid="residModuleSelectorBtnDescription" />
-                    </Supertip>
-                    <Icon>
-                      <bt:Image size="16" resid="residIcon16" />
-                      <bt:Image size="32" resid="residIcon32" />
-                      <bt:Image size="80" resid="residIcon80" />
-                    </Icon>
-                    <Action xsi:type="ShowTaskpane">
-                      <TaskpaneId>TaskpaneModuleSelector</TaskpaneId>
-                      <SourceLocation resid="residModuleSelectorUrl" />
-                    </Action>
-                  </Control>
-                </Group>
-              </CustomTab>
-
-            </ExtensionPoint>
-          </DesktopFormFactor>
-        </Host>
-      </Hosts>
-      <Resources>
-        <bt:Images>
-          <bt:Image id="residIcon16" DefaultValue="https://assets.prairieforge.ai/storage/v1/object/public/Other%20Public%20Material/Prairie%20Forge/Company%20Logos/New_Short_PF_Logo_Black.png" />
-          <bt:Image id="residIcon32" DefaultValue="https://assets.prairieforge.ai/storage/v1/object/public/Other%20Public%20Material/Prairie%20Forge/Company%20Logos/New_Short_PF_Logo_Black.png" />
-          <bt:Image id="residIcon80" DefaultValue="https://assets.prairieforge.ai/storage/v1/object/public/Other%20Public%20Material/Prairie%20Forge/Company%20Logos/New_Short_PF_Logo_Black.png" />
-        </bt:Images>
-        <bt:Urls>
-          <bt:Url id="residModuleSelectorUrl" DefaultValue="https://prairie-forge-ai.github.io/ForgeSuite-Test/module-selector/index.html" />
-          <bt:Url id="residPayrollUrl" DefaultValue="https://prairie-forge-ai.github.io/ForgeSuite-Test/payroll-recorder/index.html" />
-          <bt:Url id="residPtoUrl" DefaultValue="https://prairie-forge-ai.github.io/ForgeSuite-Test/pto-accrual/index.html" />
-          <bt:Url id="residLearnMoreUrl" DefaultValue="https://prairieforge.ai/forgesuite" />
-        </bt:Urls>
-        <bt:ShortStrings>
-          <bt:String id="residForgeSuiteTabLabel" DefaultValue="ForgeSuite" />
-          <bt:String id="residPayrollGroupLabel" DefaultValue="Payroll" />
-          <bt:String id="residTimeOffGroupLabel" DefaultValue="Time Off" />
-          <bt:String id="residExpenseGroupLabel" DefaultValue="Expenses" />
-          <bt:String id="residAdminGroupLabel" DefaultValue="Admin" />
-          <bt:String id="residPayrollBtnLabel" DefaultValue="Payroll Recorder" />
-          <bt:String id="residPtoBtnLabel" DefaultValue="PTO Accrual" />
-          <bt:String id="residCreditCardBtnLabel" DefaultValue="Credit Card Review" />
-          <bt:String id="residCommissionBtnLabel" DefaultValue="Commission Calc" />
-          <bt:String id="residModuleSelectorBtnLabel" DefaultValue="All Modules" />
-          <bt:String id="residGetStartedTitle" DefaultValue="ForgeSuite by PrairieForge" />
-        </bt:ShortStrings>
-        <bt:LongStrings>
-          <bt:String id="residPayrollBtnDescription" DefaultValue="Open Payroll Recorder to process and validate payroll entries." />
-          <bt:String id="residPtoBtnDescription" DefaultValue="Open PTO Accrual to manage employee time-off balances." />
-          <bt:String id="residCreditCardBtnDescription" DefaultValue="Review and categorize credit card expenses." />
-          <bt:String id="residCommissionBtnDescription" DefaultValue="Calculate and track sales commissions." />
-          <bt:String id="residModuleSelectorBtnDescription" DefaultValue="Open the module selector to access all ForgeSuite tools and settings." />
-          <bt:String id="residGetStartedDescription" DefaultValue="ForgeSuite provides integrated tools for Payroll, PTO, Expenses, and more." />
-        </bt:LongStrings>
-      </Resources>
-    </VersionOverrides>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>TaskpaneSelector</TaskpaneId>
+                    <SourceLocation resid="residModuleSelectorUrl" />
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="residIcon16" DefaultValue="https://assets.prairieforge.ai/storage/v1/object/public/Other%20Public%20Material/Prairie%20Forge/Company%20Logos/New_Short_PF_Logo_Black.png" />
+        <bt:Image id="residIcon32" DefaultValue="https://assets.prairieforge.ai/storage/v1/object/public/Other%20Public%20Material/Prairie%20Forge/Company%20Logos/New_Short_PF_Logo_Black.png" />
+        <bt:Image id="residIcon80" DefaultValue="https://assets.prairieforge.ai/storage/v1/object/public/Other%20Public%20Material/Prairie%20Forge/Company%20Logos/New_Short_PF_Logo_Black.png" />
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="residModuleSelectorUrl" DefaultValue="https://prairie-forge-ai.github.io/ForgeSuite-Test/module-selector/index.html" />
+        <bt:Url id="residPayrollUrl" DefaultValue="https://prairie-forge-ai.github.io/ForgeSuite-Test/payroll-recorder/index.html" />
+        <bt:Url id="residPtoUrl" DefaultValue="https://prairie-forge-ai.github.io/ForgeSuite-Test/pto-accrual/index.html" />
+        <bt:Url id="residLearnMoreUrl" DefaultValue="https://prairieforge.ai/forgesuite" />
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="residGroupLabel" DefaultValue="ForgeSuite" />
+        <bt:String id="residPayrollBtnLabel" DefaultValue="Payroll" />
+        <bt:String id="residPtoBtnLabel" DefaultValue="PTO" />
+        <bt:String id="residAllModulesBtnLabel" DefaultValue="All Modules" />
+        <bt:String id="residGetStartedTitle" DefaultValue="ForgeSuite by PrairieForge" />
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="residPayrollBtnDescription" DefaultValue="Open Payroll Recorder to process and validate payroll entries." />
+        <bt:String id="residPtoBtnDescription" DefaultValue="Open PTO Accrual to manage employee time-off balances." />
+        <bt:String id="residAllModulesBtnDescription" DefaultValue="Open the module selector to access all ForgeSuite tools." />
+        <bt:String id="residGetStartedDescription" DefaultValue="ForgeSuite provides integrated tools for Payroll, PTO, and more." />
+      </bt:LongStrings>
+    </Resources>
   </VersionOverrides>
 </OfficeApp>
