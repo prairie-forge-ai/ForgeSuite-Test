@@ -15,6 +15,7 @@
   <IconUrl DefaultValue="https://assets.prairieforge.ai/storage/v1/object/public/Other%20Public%20Material/Prairie%20Forge/Company%20Logos/New_Short_PF_Logo_Black.png" />
   <HighResolutionIconUrl DefaultValue="https://assets.prairieforge.ai/storage/v1/object/public/Other%20Public%20Material/Prairie%20Forge/Company%20Logos/New_Short_PF_Logo_Black.png" />
   <SupportUrl DefaultValue="https://prairieforge.ai/support" />
+  <PrivacyUrl DefaultValue="https://prairieforge.ai/privacy-policy" />
   <AppDomains>
     <AppDomain>https://*.supabase.co</AppDomain>
     <AppDomain>https://appsforoffice.microsoft.com</AppDomain>
